@@ -32,9 +32,9 @@ require 'yaml'
 require 'date'
 require 'sanitize'
 
-username = 'KratomGuide'
+username = 'ChrisSAustDems'
 
-uri = URI.parse(ARGV[0] || "https://www.twitter.com/#{username}")
+uri = URI.parse(ARGV[0] || "https://www.x.com/#{username}")
 http = Net::HTTP.new(uri.host, uri.port)
 http.use_ssl = true
 http.verify_mode = OpenSSL::SSL::VERIFY_NONE
@@ -61,14 +61,14 @@ tweets.each do |tweet|
   
   details = {}
   details[:time] = DateTime.strptime(tweet.search('._timestamp')[0]["data-time"], '%s')
-  details[:permalink] = "http://www.twitter.com" + tweet.search('.tweet-timestamp')[0][:href]
+  details[:permalink] = "http://www.x.com" + tweet.search('.tweet-timestamp')[0][:href]
   
   source = tweet.search('.username b')[0].inner_text.strip
   tweet_content = Sanitize.clean(tweet.search('.js-tweet-text')[0].inner_html.strip, :elements => ['a'], :attributes => {'a' => ['href']}).gsub("href=\"/", "href=\"http://www.twitter.com/")
 
   if source.downcase != username.downcase
     # This is a retweet
-    details[:tweet] = "RT <a href=\"http://twitter.com/#{source}\">@#{source}</a> " + tweet_content
+    details[:tweet] = "RT <a href=\"http://x.com/#{source}\">@#{source}</a> " + tweet_content
   else
     details[:tweet] = tweet_content
   end
